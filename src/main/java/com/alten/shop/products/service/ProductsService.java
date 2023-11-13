@@ -24,7 +24,7 @@ public class ProductsService{
 
     /**
      * Get all products
-     * @return a list of @link Product
+     * @return a list of @link ProductDto
      */
     public List<ProductDto> getAll(){
         return this.productsRepository.findAll().stream().map(this.productsMapper::toDto).toList();
@@ -33,7 +33,7 @@ public class ProductsService{
     /**
      * Retur a product by id
      * @param productId the id of the product to consult
-     * @return
+     * @return  @link ProductDto
      */
     public ProductDto getProduct(String productId) {
         return productsRepository.findById(productId)
@@ -42,18 +42,32 @@ public class ProductsService{
     }
 
 
-
+    /**
+     * Delete a prodcut by id
+     * @param productId the id of the product to delete
+     */
     public void deleteProduct(String productId){
         ProductEntity productEntity = productsRepository.findById(productId)
                 .orElseThrow(() -> new ProductNonFoundException(NO_PRODUCT_WITH_THE_GIVEN_ID_FOUND));
          this.productsRepository.delete(productEntity);
     }
 
+    /**
+     * Save a new a product
+     * @param productDto the data of the product
+     * @return @link ProductDto
+     */
     public ProductDto saveProduct(ProductDto productDto){
         ProductEntity  productEntity =  this.productsMapper.toEntity(productDto);
         return this.productsMapper.toDto(this.productsRepository.save(productEntity));
     }
 
+    /**
+     * Update a product
+     * @param productId the id of the product to consult
+     * @param productDto the data of the product
+     * @return @link ProductDto
+     */
     public ProductDto updateProduct(String productId, ProductDto productDto){
         ProductEntity productEntity = productsRepository.findById(productId)
                 .orElseThrow(() -> new ProductNonFoundException(NO_PRODUCT_WITH_THE_GIVEN_ID_FOUND));
